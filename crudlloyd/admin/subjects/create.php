@@ -67,7 +67,7 @@
 
                     <!-- Form Actions -->
                     <button
-                        type="button"
+                        type="submit"
                         class="btn btn-primary"
                     >
                         Save Subject
