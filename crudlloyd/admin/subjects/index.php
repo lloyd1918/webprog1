@@ -1,3 +1,15 @@
+<?php
+session_start();
+include "../../config/database.php";
+// only admin and access this page.
+if(!isset($_SESSION["role"]) || $_SESSION["role"] != "admin"){
+    header("Location: ../../index.php");
+    exit;
+}
+$sql = "SELECT * FROM subjects ORDER BY id ASC";
+$result = mysqli_query($conn, $sql);
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -38,24 +50,26 @@
             </a>
 
         </div>
-    </nav>
+    </nav>  
 
     <!-- Main Content -->
     <div class="container py-4">
-
+            <?php if (isset($_GET["message"])) { ?>
+            <div class="alert alert-success"><?php echo htmlspecialchars($_GET["message"]); ?></div>
+             <?php } ?>
         <!-- Header Section -->
         <div class="d-flex justify-content-between mb-3">
 
             <div>
                 <h2>Subjects</h2>
 
-                <a href="dashboard.html">
+                <a href="../dashboard.php">
                     ← Dashboard
                 </a>
             </div>
 
             <a
-                href="subject_form.html"
+                href="create.php"
                 class="btn btn-primary"
             >
                 + Add Subject
@@ -72,41 +86,48 @@
 
                     <thead>
                         <tr>
-                            <th>Code</th>
-                            <th>Subject Name</th>
+                            <th>subject_Code</th>
+                            <th>Subject_Name</th>
                             <th>Units</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
 
                     <tbody>
 
                         <!-- Subject Record -->
+                         
+                        <?php while($row = mysqli_fetch_assoc($result)){?>
                         <tr>
-                            <td>IT101</td>
+                            <td><?php echo htmlspecialchars($row["subject_code"]); ?></td>
 
                             <td>
-                                Introduction to Computing
+                                <?php echo htmlspecialchars($row["subject_name"]); ?>
                             </td>
 
-                            <td>3</td>
+                            <td>
+                                <?php echo htmlspecialchars($row["units"]); ?> </td>
 
                             <td>
+
                                 <a
-                                    href="subject_form.html"
-                                    class="btn btn-warning btn-sm"
+                                  href="edit.php?id=<?php echo $row['id']; ?>"
+                                 class="btn btn-warning btn-sm"
                                 >
-                                    Edit
+                                Edit
                                 </a>
 
-                                <button
+                                
+                                    <a
                                     class="btn btn-danger btn-sm"
+                                    href="delete.php?id=<?php echo $row['id'];?>"
+                                    onclick="return confirm ('Are you sure you want to delete this record?')"
                                 >
                                     Delete
-                                </button>
+                                </a>
+                                
                             </td>
                         </tr>
-
+                    <?php } ?>
                     </tbody>
 
                 </table>
