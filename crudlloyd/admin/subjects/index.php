@@ -86,7 +86,7 @@ $result = mysqli_query($conn, $sql);
 
                     <thead>
                         <tr>
-                            <th>subject_Code</th>
+                            <th>Subject_Code</th>
                             <th>Subject_Name</th>
                             <th>Units</th>
                         </tr>
